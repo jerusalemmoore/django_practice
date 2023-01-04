@@ -1,0 +1,27 @@
+{%extends './base.html' %}
+{% load static %}
+
+{% block title %}
+<title>landing</title>
+
+{% endblock %}
+{% block body %}
+<div id="hello"> hello</div>
+
+<form method='post'>
+
+  {% csrf_token %}
+  {% for field in registrationForm %}
+  {{ form.non_field_errors }}
+
+  {{ field.label_tag }}
+  <div class="fieldWrapper">
+    {{ field.errors }}
+    {{ field }}
+  </div>
+  {% endfor %}
+  <input type="submit" class="btn btn-primary"></input>
+
+</form>
+
+{% endblock %}

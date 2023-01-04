@@ -1,0 +1,15 @@
+#!/bin/sh
+#shorthand script for running manage.py commands in docker container
+#start docker container and run django util commands
+#running "web" service in docker-compose.yaml
+
+if [ $# == 0 ]; then
+  echo "error, command takes at least 1 arg shell|migrate|makemigrations"
+  exit 1
+fi
+command="docker compose run web python manage.py "
+for arg in "$@"
+do
+  command="${command} $arg"
+done
+$command
