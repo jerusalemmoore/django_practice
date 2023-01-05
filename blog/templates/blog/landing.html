@@ -6,22 +6,23 @@
 
 {% endblock %}
 {% block body %}
-<div id="hello"> hello</div>
+<div class="container shadow-lg w-50 my-5 py-5 rounded-3 ">
+  <form method="post" class=" overflow-auto container text-center row justify-content-center ">
+    <div class="col-4 ">
+      <h1>LOGIN</h1>
+      {% csrf_token %}
+      {% for field in loginForm %}
+      {{ form.non_field_errors }}
+      {{ field.label_tag }}
+      {{ field.errors }}
 
-<form method='post'>
-
-  {% csrf_token %}
-  {% for field in registrationForm %}
-  {{ form.non_field_errors }}
-
-  {{ field.label_tag }}
-  <div class="fieldWrapper">
-    {{ field.errors }}
-    {{ field }}
+      <div>{{ field }}</div>
+      {% endfor %}
+      <input type="submit" class="btn btn-primary mt-3 "></input>
+    </div>
+  </form>
+  <div class="float-end">
+    <a href="{% url 'registration' %}">No account? Register here.</a>
   </div>
-  {% endfor %}
-  <input type="submit" class="btn btn-primary"></input>
-
-</form>
-
+</div>
 {% endblock %}

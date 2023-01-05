@@ -22,9 +22,13 @@
 </head>
 
 <body>
+
   <nav class="navbar navbar-dark bg-primary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'landing' %}">My Blog</a </div>
+      <a class="navbar-brand" href="{% url 'landing' %}">My Blog</a>
+
+      <a class="nav-link active text-light" href="{% url 'mainFeed' %}">Main Feed</a>
+    </div>
   </nav>
 
   {% block body %}

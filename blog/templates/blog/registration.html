@@ -1,0 +1,23 @@
+{%extends './base.html'%}
+
+{%block body%}
+<div class="container shadow-lg w-50 my-5 py-5 rounded-3 ">
+  <form method="post" class=" overflow-auto container text-center row justify-content-center ">
+    <div class="col-4 ">
+      <h1>Register</h1>
+      {% csrf_token %}
+      {% for field in registrationForm %}
+      {{ form.non_field_errors }}
+      {{ field.label_tag }}
+      {{ field.errors }}
+
+      <div>{{ field }}</div>
+      {% endfor %}
+      <input type="submit" class="btn btn-primary mt-3 "></input>
+    </div>
+  </form>
+  <div class="float-end">
+    <a href="{% url 'registration' %}">No account? Register here.</a>
+  </div>
+</div>
+{% endblock %}
