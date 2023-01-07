@@ -1,0 +1,70 @@
+{% extends 'blog/base.html'%}
+
+{% block title %}
+{% endblock %}
+
+{% block body%}
+<div class="container float-start m-5">
+  <h1>
+    Hello {{user.username}}
+  </h1>
+</div>
+<div class=" container text-center my-3">
+  <button type="button" class=" text-dark btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <h2>
+      + Add Post
+    </h2>
+  </button>
+  <!-- modal for adding post -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-1">
+
+          <form method='post'>
+            {% csrf_token %}
+            {% for field in postForm %}
+            {{ field.label_tag }}
+            <div class="fieldWrapper">
+              {{ field.errors }}
+              {{ field }}
+            </div>
+            {% endfor %}
+            <!-- <input type="submit" value="Submit"> -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <input type="submit" class="btn btn-primary"></input>
+            </div>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% for post in posts %}
+<div class="card position-sticky bg-primary text-white text-center py-1 my-4 mx-auto border border-dark rounded-3 shadow-lg  w-50">
+  <div class="card-header border-dark">
+    <div class="float-start pb-1">
+      <small class="text-dark ">
+        <a class="text-white text-decoration-none" href="{%url 'home' post.user.id%}">{{post.user}} </a>
+
+      </small>
+    </div>
+  </div>
+  <div class="card-body py-3">
+    {{post.content}}
+  </div>
+  <div class="card-footer border-dark">
+    <span class="float-end" style="font-size:10px;">
+      {{post.pub_date}}
+    </span>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

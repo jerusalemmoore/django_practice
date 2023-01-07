@@ -7,7 +7,7 @@ if [ $# == 0 ]; then
   echo "error, command takes at least 1 arg shell|migrate|makemigrations"
   exit 1
 fi
-command="docker compose run web python manage.py "
+command="docker compose run --rm web python manage.py "
 for arg in "$@"
 do
   command="${command} $arg"

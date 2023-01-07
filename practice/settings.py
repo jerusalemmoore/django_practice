@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'practiceApp',
     'blog',
     'bootstrap5',
+    'django_extensions',
+
 ]
 AUTHENTICATION_BACKENDS = (
         'django.contrib.auth.backends.ModelBackend',
