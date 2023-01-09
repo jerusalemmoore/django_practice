@@ -10,3 +10,9 @@ class Post(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.content
+
+class Follower(models.Model):
+    user = models.ForeignKey(User, related_name="following",on_delete=models.CASCADE)
+    following = models.ForeignKey(User, related_name="followed_by",on_delete=models.CASCADE)
+    def __str__(self):
+        return self.user.username

@@ -1,70 +1,118 @@
 {% extends 'blog/base.html'%}
 
 {% block title %}
+<title>home</title>
 {% endblock %}
 
+{% block navButtons%}
+{% if loggedUser.id != user.id and loggedUser%}
+{% if followers %}
+{% if loggedUser in followers %}
+<a class="nav-link active text-light" href="">Follow</a>
+{% else %}
+<a class="nav-link active text-light" href="{% url 'unfollow' user.id%}">Unfollow</a>
+{% endif %}
+{% else %}
+<a class="nav-link active text-light" href="{% url 'follow' user.id%}">Follow</a>
+
+{%endif %}
+<!-- <a class="nav-link active text-light" href="">Follow</a> -->
+
+{% endif %}
+hello
+{%endblock%}
+
 {% block body%}
-<div class="container float-start m-5">
-  <h1>
-    Hello {{user.username}}
-  </h1>
-</div>
-<div class=" container text-center my-3">
-  <button type="button" class=" text-dark btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    <h2>
-      + Add Post
-    </h2>
-  </button>
-  <!-- modal for adding post -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="d-flex flex-row align-items-start">
+  <div class="d-flex flex-shrink-1 flex-column align-items-center px-5">
+
+    <div class="d-flex flex-row">
+      <h1 class="d-flex flex-col ">
+        {{user.username}}
+      </h1>
+
+    </div>
+    <div class="d-flex flex-row  ">
+      <div class="flex-grow-1 flex-column px-2">
+        <h3>Followers</h3>
+        {% for follower in followers %}
+        <div>
+          <a class="text-decoration-none text-dark" href="{% url 'home' follower.user.id %}">{{follower.user}}</a>
         </div>
-        <div class="modal-body py-1">
-
-          <form method='post'>
-            {% csrf_token %}
-            {% for field in postForm %}
-            {{ field.label_tag }}
-            <div class="fieldWrapper">
-              {{ field.errors }}
-              {{ field }}
-            </div>
-            {% endfor %}
-            <!-- <input type="submit" value="Submit"> -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <input type="submit" class="btn btn-primary"></input>
-            </div>
-          </form>
-
+        {% endfor %}
+      </div>
+      <div class="flex-grow-1  flex-column px-2">
+        <h3>Following</h3>
+        {% for follower in following %}
+        <div>
+          <a class="text-decoration-none text-dark" href="{% url 'home' follower.following.id %}">{{follower.following}}</a>
         </div>
-
+        {% endfor %}
       </div>
     </div>
   </div>
-</div>
-{% for post in posts %}
-<div class="card position-sticky bg-primary text-white text-center py-1 my-4 mx-auto border border-dark rounded-3 shadow-lg  w-50">
-  <div class="card-header border-dark">
-    <div class="float-start pb-1">
-      <small class="text-dark ">
-        <a class="text-white text-decoration-none" href="{%url 'home' post.user.id%}">{{post.user}} </a>
+  <div class="d-flex flex-column flex-grow-1 text-center my-3">
+    <!-- only let user add posts to their own home page -->
+    {% if loggedUser.id == user.id %}
+    <button type="button" class=" text-dark btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <h2>
+        + Add Post
+      </h2>
+    </button>
+    {%endif%}
+    <!-- modal for adding post -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body py-1">
 
-      </small>
+            <form method='post'>
+              {% csrf_token %}
+              {% for field in postForm %}
+              {{ field.label_tag }}
+              <div class="fieldWrapper">
+                {{ field.errors }}
+                {{ field }}
+              </div>
+              {% endfor %}
+              <!-- <input type="submit" value="Submit"> -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <input type="submit" class="btn btn-primary"></input>
+              </div>
+            </form>
+
+          </div>
+
+        </div>
+      </div>
     </div>
+    {% for post in posts %}
+    <!-- posts in card -->
+    <div class="card bg-dark text-white text-start py-1 my-4 mx-auto border border-primary rounded-3 shadow-lg w-50 ">
+      <div class="card-header border-primary">
+        <div class="float-start pb-1">
+          <small>
+            <a class="text-white text-decoration-none" href="{%url 'home' post.user.id%}">{{post.user}} </a>
+          </small>
+        </div>
+      </div>
+      <div class="card-body  text-light py-5 px-5">
+        {{post.content}}
+      </div>
+      <div class="card-footer border-primary">
+        <span class="float-end" style="font-size:10px;">
+          {{post.pub_date}}
+        </span>
+      </div>
+    </div>
+    <!-- </div> -->
+    {% endfor %}
   </div>
-  <div class="card-body py-3">
-    {{post.content}}
-  </div>
-  <div class="card-footer border-dark">
-    <span class="float-end" style="font-size:10px;">
-      {{post.pub_date}}
-    </span>
-  </div>
+
 </div>
-{% endfor %}
 {% endblock %}

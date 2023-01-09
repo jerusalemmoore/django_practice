@@ -6,5 +6,7 @@ urlpatterns = [
     path('logout', views.logoutView, name='logoutView'),
     path('mainfeed', views.mainFeed, name='mainFeed'),
     path('registration', views.registration, name='registration'),
-    path('home/<int:id>', views.home,name='home')
+    path('home/<int:id>', views.home,name='home'),
+    path('home/unfollow/<int:id>', views.unfollow,name='unfollow'),
+    path('home/follow/<int:id>', views.follow, name="follow")
 ]

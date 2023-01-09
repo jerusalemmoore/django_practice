@@ -21,18 +21,18 @@
   </h2>
 </div>
 {% for post in posts %}
-<div class="card bg-primary text-white text-center py-1 my-4  mx-auto border border-dark rounded-3 shadow-lg  w-50 ">
-  <div class="card-header border-dark">
+<div class="card position-sticky bg-dark text-white text-start py-1 my-4 mx-auto border border-primary rounded-3 shadow-lg  w-50">
+  <div class="card-header border-primary">
     <div class="float-start pb-1">
       <small>
         <a class="text-white text-decoration-none" href="{%url 'home' post.user.id%}">{{post.user}} </a>
       </small>
     </div>
   </div>
-  <div class="card-body py-3 text-start px-5">
+  <div class="card-body  text-light py-5 px-5">
     {{post.content}}
   </div>
-  <div class="card-footer border-dark">
+  <div class="card-footer border-primary">
     <span class="float-end" style="font-size:10px;">
       {{post.pub_date}}
     </span>
