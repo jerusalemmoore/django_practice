@@ -2,6 +2,7 @@
 {# Load the tag library #}
 {% load bootstrap5 %}
 
+
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -17,13 +18,33 @@
   {% block title %}
   {% endblock %}
   <!-- refresh my css on reload of webpage -->
+{%block autocompleteScript%}
+<script>
+  $( function() {
+    var availableTags = [
+        {% for user in users %}
+            "{{user.username}}",
+        {% endfor %}
+    ];
+    $( "#tags" ).autocomplete({
+      source: availableTags,
+      minLength:2,
+      select: function(event, ui){
+        $("#tags").val(ui.item.label);
+        $("#myform").submit();
+      }
+    });
+    });
+    // $("#myForm").submit();
 
+    </script>
+    {% endblock %}
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
 
-  <nav class="navbar navbar-dark bg-primary">
+  <nav class="navbar fixed-top p-auto  navbar-dark bg-primary">
     <div class="container-fluid">
       <div class="d-flex flex-row bd-highlight ">
         {%if loggedUser.is_authenticated%}
@@ -32,6 +53,8 @@
         <a class="navbar-brand" href="{% url 'landing' %}">My Blog</a>
         {% endif %}
         <a class="nav-link active text-light" href="{% url 'mainFeed' %}">Main Feed</a>
+        {%block extraNavs%}
+        {%endblock%}
       </div>
       <div class="d-flex flex-row-reverse bd-highlight">
         {%if loggedUser.is_authenticated%}
@@ -40,12 +63,15 @@
 
         {% block navButtons %}
         {%endblock%}
+
       </div>
     </div>
   </nav>
-
+  <!-- add space between fixed navbar and content under -->
+  <div class="mt-5 pt-5">
   {% block body %}
   {% endblock %}
+  </div>
 </body>
 
 </html>

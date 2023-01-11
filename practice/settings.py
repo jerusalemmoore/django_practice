@@ -33,12 +33,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
+    'livereload',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'jquery',
+
     'practiceApp',
     'blog',
     'bootstrap5',
@@ -140,3 +145,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # class CustomFormRenderer(TemplatesSetting):
 #     form_template_name = "form_template.html"
 # FORM_RENDERER="PROJECT.SETTINGS.CustomFormRenderer"
+MIDDLEWARE_CLASSES = (
+    'livereload.middleware.LiveReloadScript',
+)

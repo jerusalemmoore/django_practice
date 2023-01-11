@@ -41,3 +41,18 @@ class LoginForm(AuthenticationForm):
     #     username = self.cleaned_data.get('username')
     #     password=self.cleaned_data.get('password')
     #     return self.cleaned_data
+
+
+class UserSearchForm(forms.Form):
+    class Meta:
+        fields=['username']
+    username = forms.CharField(max_length=100,
+    widget=forms.TextInput(attrs={'class': 'rounded-pill align-self-center', 'id':'tags', 'placeholder':'Search'}))
+    # validate username so that you can't submit if username with given string doesn't exist
+    # might want to rewokr this to instead redirect to possible matches pages
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise ValidationError("Error, no users with given username")

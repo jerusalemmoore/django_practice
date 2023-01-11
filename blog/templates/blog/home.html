@@ -1,9 +1,28 @@
 {% extends 'blog/base.html'%}
-
+{% load static %}
 {% block title %}
 <title>home</title>
-{% endblock %}
+<script type="text/javascript" src=" {% static 'blog/search.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
+</script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js">
+</script>
+
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+{%block extraNavs%}
+<form class="align-bottom align-items-center justify-content-center" style="vertical-align:top;" id="myform" method="post">
+  {% csrf_token %}
+  {{userForm.username}}
+</form>
+
+<input type="submit" form="myform" style="visibility:hidden;"" class="btn btn-default">
+<!-- <span class="glyphicon
+           glyphicon-search">Search</span> -->
+</input>
+{%endblock%}
 {% block navButtons%}
 {% if loggedUser.id != user.id and loggedUser%}
 {% if followers %}
@@ -19,9 +38,7 @@
 <!-- <a class="nav-link active text-light" href="">Follow</a> -->
 
 {% endif %}
-hello
 {%endblock%}
-
 {% block body%}
 <div class="d-flex flex-row align-items-start">
   <div class="d-flex flex-shrink-1 flex-column align-items-center px-5">
@@ -33,7 +50,7 @@ hello
 
     </div>
     <div class="d-flex flex-row  ">
-      <div class="flex-grow-1 flex-column px-2">
+      <div class="flex-grow-1 flex-column text-center px-2">
         <h3>Followers</h3>
         {% for follower in followers %}
         <div>
@@ -41,7 +58,7 @@ hello
         </div>
         {% endfor %}
       </div>
-      <div class="flex-grow-1  flex-column px-2">
+      <div class="flex-grow-1  flex-column text-center px-2">
         <h3>Following</h3>
         {% for follower in following %}
         <div>
@@ -69,7 +86,6 @@ hello
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body py-1">
-
             <form method='post'>
               {% csrf_token %}
               {% for field in postForm %}
@@ -91,9 +107,9 @@ hello
         </div>
       </div>
     </div>
-    {% for post in posts %}
+    {% for post in allposts %}
     <!-- posts in card -->
-    <div class="card bg-dark text-white text-start py-1 my-4 mx-auto border border-primary rounded-3 shadow-lg w-50 ">
+    <div class="card bg-dark text-white text-start py-1 my-4 mx-auto border border-primary rounded-3 shadow-lg w-75 ">
       <div class="card-header border-primary">
         <div class="float-start pb-1">
           <small>
@@ -113,6 +129,8 @@ hello
     <!-- </div> -->
     {% endfor %}
   </div>
+  <div class="d-flex flex-column flex-grow-1 text-center my-3">
 
+    </div>
 </div>
 {% endblock %}
