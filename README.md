@@ -4,7 +4,7 @@ playing around with django while learning more about web programming fundamental
   will need to test, but as long as this is the case. project should be runnable via
     docker-compose build\ 
     docker-compose up\
-    access through: http://localhost:8000/blog/\
+    access through: http://localhost:8000/blog/
   
   
     note: still need to take care of possible race condition in service start:).
