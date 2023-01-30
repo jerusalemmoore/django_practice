@@ -1,0 +1,7 @@
+REGISTRATION FORM FIELD DISAPPEARS
+  description:
+    on form errors, sometimes fields disappear when error renders
+
+  case:
+    entered non unique user to registration form
+    email field disappears

@@ -10,12 +10,21 @@ from django.contrib.auth.forms import UserCreationForm ,AuthenticationForm
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from .functions import *
+
 # view that users land on if logged in or if anonymous user wants to view
 def mainFeed(request):
-
     loggedUser = request.user
+
     posts = Post.objects.all().order_by('-pub_date')
-    context = {'posts':posts, 'loggedUser':loggedUser}
+    if request.method=='POST':
+        userSearchForm = UserSearchForm(request.POST)
+        if userSearchForm.is_valid():
+            value=userSearchForm.data['usernamne']
+            return HttpResponseRedirect(reverse('home', kwargs={'id':Users.objects.get(username=value).pk}))
+    else:
+        userSearchForm = UserSearchForm()
+    context = {'posts':posts, 'loggedUser':loggedUser, 'userSearchForm': userSearchForm}
+
     return render(request, 'blog/mainFeed.html', context)
 
 # view users hit when reaching site, allows login or traversal to registration view
@@ -67,33 +76,33 @@ def home(request, id):
     user = User.objects.get(pk=id)
     # users follower info
     following = user.following.all()
-    followers= user.followed_by.all()
-    allposts =retrieveAllPosts(user)
+    followers = user.followed_by.all()
+    allposts = retrieveAllPosts(user)
     if request.method == 'POST':
         postForm = PostForm(request.POST)
-        userForm = UserSearchForm(request.POST)
+        userSearchForm = UserSearchForm(request.POST)
         if postForm.is_valid():
             post = postForm.save(commit=False)
             post.user = user
             post.save()
             return HttpResponseRedirect(reverse('home', kwargs={'id':user.id}))
-        elif userForm.is_valid():
+        elif userSearchForm.is_valid():
             print(User.objects.all())
             print("form")
             print()
-            value = userForm.data['username']
+            value = userSearchForm.data['username']
             # print(User.objects.get(username=userForm['username']).id)
             return HttpResponseRedirect(reverse('home', kwargs={'id':User.objects.get(username=value).pk}))
     else:
         postForm = PostForm()
-        userForm =UserSearchForm()
+        userSearchForm =UserSearchForm()
     # print(followers)
     # print(following)
     return render(request, 'blog/home.html', {'loggedUser':loggedUser,
     'user': user,'postForm': postForm,
      'followers':followers,'following':following,
      'users':users,
-     'userForm':userForm,
+     'userSearchForm':userSearchForm,
      'allposts':allposts})
 
 def unfollow(request, id):
@@ -108,3 +117,6 @@ def follow(request,id):
     follower = Follower(user=loggedUser, following=user)
     follower.save()
     return HttpResponseRedirect(reverse('home', kwargs={'id':user.id}))
+# def removePost(request,id):
+#     post = get_object_or_404(Post,id=id)
+#

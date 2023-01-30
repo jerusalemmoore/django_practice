@@ -4,3 +4,4 @@ django-bootstrap-v5
 django-extensions
 django-livereload-server
 django-jquery
+Pillow
