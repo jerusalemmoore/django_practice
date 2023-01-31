@@ -1,12 +1,28 @@
+version: '3'
 services:
+  pgdirectories:
+    build: .
+    volumes:
+      - .:/code
+    command: python checkPgDirs.py
   db:
-    image: postgres:13
+    image: postgres:13.9
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - pgdirectories
+
+  livereload:
+    build: .
+    command: python manage.py livereload
+    volumes:
+      - .:/code
+    depends_on:
+      - db
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -19,4 +35,4 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     depends_on:
-      - db
+        - livereload

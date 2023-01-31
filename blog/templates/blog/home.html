@@ -1,0 +1,154 @@
+{% extends 'blog/base.html'%}
+{% load static %}
+{% block title %}
+<title>home</title>
+<script type="text/javascript" src=" {% static 'blog/search.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js">
+</script>
+
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+{% block navButtons%}
+{% if loggedUser.id != user.id and loggedUser%}
+{% if followers %}
+{% if loggedUser in followers %}
+<a class="nav-link active text-light" href="">Follow</a>
+{% else %}
+<a class="nav-link active text-light" href="{% url 'unfollow' user.id%}">Unfollow</a>
+{% endif %}
+{% else %}
+<a class="nav-link active text-light" href="{% url 'follow' user.id%}">Follow</a>
+
+{%endif %}
+<!-- <a class="nav-link active text-light" href="">Follow</a> -->
+
+{% endif %}
+{%endblock%}
+{% block body%}
+<div class="d-flex flex-row align-items-start">
+  <div class="d-flex flex-shrink-1 flex-column align-items-center px-5">
+
+    <div class="d-flex flex-row">
+      <div class="content-section ">
+        <div class="media">
+          <img
+            style="object-fit:cover;"
+            class="  rounded-circle account-img"
+            src="{{ user.profile.image.url }}"
+          />
+          <div class="media-body">
+            <h2 class="text-center">{{ user.username }}</h2>
+          </div>
+        </div>
+        <!-- FORM HERE -->
+      </div>
+      <!-- <h1 class="d-flex flex-col ">
+        {{user.username}}
+      </h1> -->
+
+    </div>
+    <div class="d-flex flex-row  ">
+      <div class="flex-grow-1 flex-column text-center px-2">
+        <h3>Followers</h3>
+        {% for follower in followers %}
+        <div>
+          <a class="text-decoration-none text-dark" href="{% url 'home' follower.user.id %}">{{follower.user}}</a>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="flex-grow-1  flex-column text-center px-2">
+        <h3>Following</h3>
+        {% for follower in following %}
+        <div>
+          <a class="text-decoration-none text-dark" href="{% url 'home' follower.following.id %}">{{follower.following}}</a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-column flex-grow-1 text-center my-3">
+    <!-- only let user add posts to their own home page -->
+    {% if loggedUser.id == user.id %}
+    <button type="button" class=" text-dark btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <h2>
+        + Add Post
+      </h2>
+    </button>
+    {%endif%}
+    <!-- modal for adding post -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body py-1">
+            <form method='post'>
+              {% csrf_token %}
+              {% for field in postForm %}
+              {{ field.label_tag }}
+              <div class="fieldWrapper">
+                {{ field.errors }}
+                {{ field }}
+              </div>
+              {% endfor %}
+              <!-- <input type="submit" value="Submit"> -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <input type="submit" class="btn btn-primary"></input>
+              </div>
+            </form>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    {% for post in allposts %}
+    <!-- posts in card -->
+
+    <div class="card bg-dark text-white text-start py-1 my-4 mx-auto border border-primary rounded-3 shadow-lg w-75 ">
+      <div class="card-header border-primary">
+        <div class="float-start pb-1">
+          <div class="d-flex flex-row">
+            <a href="{% url 'home' post.user.id %}">
+            <img class="rounded-circle " style="height:25;width:25;" src="{{ post.user.profile.image.url }}" />
+            </a>
+            <small class="px-2">
+              <a class="text-white text-decoration-none" href="{% url 'home' post.user.id %}">{{post.user}} </a>
+            </small>
+          </div>
+        </div>
+        <div class="float-end pb-1">
+          <!-- 3 dots -->
+          <button style="background-color:transparent;border:none;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi  bi-three-dots" viewBox="0 0 16 16">
+        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+        </svg>
+        </button>
+          </div>
+      </div>
+      <div class="card-body  text-light py-5 px-5">
+        {{post.content}}
+      </div>
+      <div class="card-footer border-primary">
+        <span class="float-end" style="font-size:10px;">
+          {{post.pub_date}}
+        </span>
+      </div>
+    </div>
+    <!-- </div> -->
+    {% endfor %}
+  </div>
+  <div class="d-flex flex-column flex-grow-1 text-center my-3">
+
+    </div>
+</div>
+{% endblock %}

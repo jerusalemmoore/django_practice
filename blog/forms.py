@@ -4,13 +4,15 @@ from .models import Post
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm ,AuthenticationForm
 
 
 class PostForm(ModelForm):
     class Meta:
         model = Post
         fields = ['content']
+
+
 class RegistrationForm(UserCreationForm):
 
     class Meta:
@@ -28,23 +30,29 @@ class RegistrationForm(UserCreationForm):
         if password != confirm_password:
             raise ValidationError({"password": "Error, passwords do not match"})
         return cleaned_data
-    def save(self):
-        print("saving")
-        user = User.objects.create_user(
-            self.cleaned_data.get('username'),
-            self.cleaned_data.get('email'),
-            self.cleaned_data.get('password')
-        )
-        print(user)
-        print(user.email)
-        print(user.password)
-        return user
-class LoginForm(ModelForm):
+
+
+class LoginForm(AuthenticationForm):
     class Meta:
         model=User
         fields= ['username','password']
-    def clean(self):
-        # cleaned_data = super().clean()
-        username = self.cleaned_data.get('username')
-        password=self.cleaned_data.get('password')
-        return self.cleaned_data
+    # def clean(self):
+    #     # cleaned_data = super().clean()
+    #     username = self.cleaned_data.get('username')
+    #     password=self.cleaned_data.get('password')
+    #     return self.cleaned_data
+
+
+class UserSearchForm(forms.Form):
+    class Meta:
+        fields=['username']
+    username = forms.CharField(max_length=100,
+    widget=forms.TextInput(attrs={'class': 'rounded-pill align-self-center', 'id':'tags', 'placeholder':'Search'}))
+    # validate username so that you can't submit if username with given string doesn't exist
+    # might want to rewokr this to instead redirect to possible matches pages
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise ValidationError("Error, no users with given username")

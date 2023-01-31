@@ -6,53 +6,39 @@
 {% endblock %}
 
 {% block body %}
-<div class=" text-center bg-primary py-3 text-white">
+<!-- <div class=" text-center bg-primary py-3 text-white">
   <h1>My Practice Blog</h1>
-</div>
-<div class="text-center my-3">
+</div> -->
+<!-- <div class="text-center my-3">
   <button type="button" class=" text-dark btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
     <h2>
       + Add Post
     </h2>
-  </button>
-  <!-- modal for adding post -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body py-1">
-
-          <form method='post'>
-            {% csrf_token %}
-            {% for field in postForm %}
-            {{ field.label_tag }}
-            <div class="fieldWrapper">
-              {{ field.errors }}
-              {{ field }}
-            </div>
-            {% endfor %}
-            <!-- <input type="submit" value="Submit"> -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <input type="submit" class="btn btn-primary"></input>
-            </div>
-          </form>
-
-        </div>
-
-      </div>
-    </div>
-  </div>
+  </button> -->
+<div class=" container text-center mb-3 pb-3">
+  <h2>
+    Feed
+  </h2>
 </div>
 {% for post in posts %}
-<div class="card bg-primary text-white text-center py-1 my-3  mx-auto border border-dark rounded-3 shadow-lg  w-50">
-  <div class="card-body py-3">
+<div class="card position-sticky bg-dark text-white text-start py-1 my-4 mx-auto border border-primary rounded-3 shadow-lg  w-50">
+  <div class="card-header border-primary">
+    <div class="float-start pb-1">
+      <div class="d-flex flex-row">
+        <a href="{% url 'home' post.user.id %}">
+        <img class="rounded-circle " style="height:25;width:25;" src="{{ post.user.profile.image.url }}" />
+        </a>
+        <small class="px-2">
+          <a class="text-white text-decoration-none" href="{% url 'home' post.user.id %}">{{post.user}} </a>
+        </small>
+      </div>
+
+    </div>
+  </div>
+  <div class="card-body  text-light py-5 px-5">
     {{post.content}}
   </div>
-  <div class="card-footer border-dark">
+  <div class="card-footer border-primary">
     <span class="float-end" style="font-size:10px;">
       {{post.pub_date}}
     </span>
