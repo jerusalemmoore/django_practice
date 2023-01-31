@@ -13,8 +13,8 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    # depends_on:
-    #   - pgdirectories
+    depends_on:
+      - pgdirectories
 
   livereload:
     build: .
