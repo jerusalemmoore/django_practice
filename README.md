@@ -11,5 +11,5 @@ playing around with django while learning more about web programming fundamental
     note: still need to take care of possible race condition in service start:).
     web service in docker-compose.yml may start before livereload does but this 
     shouldn't be  an issue if you're just looking around 
-    note: for linux, you may need to prepend the above commands with sudo 
+    note: for linux, you may need to prepend the above commands with "sudo" 
     
