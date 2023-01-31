@@ -1,0 +1,7 @@
+pg_twophase
+pg_tblspc
+pg_stat
+pg_snapshots
+pg_commit_ts
+pg_logical/snapshots
+pg_logical/mappings
