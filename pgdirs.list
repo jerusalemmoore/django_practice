@@ -5,3 +5,4 @@ pg_snapshots
 pg_commit_ts
 pg_logical/snapshots
 pg_logical/mappings
+pg_stat_tmp
