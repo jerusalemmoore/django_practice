@@ -11,48 +11,40 @@
 {% bootstrap_messages %}
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="{% static 'blog/style.css' %}?{% now "U" %}">
 
 <head>
+  {% comment %} required scripts {% endcomment %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
+  {% comment %} <link rel="stylesheet" href="{% static 'assets/css/bootstrap.css' %}"> {% endcomment %}
+  <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+
+{% comment %} my static files {% endcomment %}
+  <link rel="stylesheet" href="{% static 'blog/style.css' %}?{% now "U" %}">
+  <script type="text/javascript" src="{% static "blog/search.js" %}" ></script>
+  <script type="text/javascript" src="{% static 'blog/elipsisMenu.js'%}"></script>
+  <script type="text/javascript" src="{% static 'blog/updatePostModal.js' %}"></script>
   {% block title %}
   {% endblock %}
-  <!-- refresh my css on reload of webpage -->
-{%block autocompleteScript%}
-<script>
-  $( function() {
-    var availableTags = [
-        {% for user in users %}
-            "{{user.username}}",
-        {% endfor %}
-    ];
-    $( "#tags" ).autocomplete({
-      source: availableTags,
-      minLength:2,
-      select: function(event, ui){
-        $("#tags").val(ui.item.label);
-        $("#myform").submit();
-      }
-    });
-    });
-    // $("#myForm").submit();
 
-    </script>
-    {% endblock %}
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
+  {% comment %} users list for autocomplete searchbar {% endcomment %}
+{{ serializedUsers | json_script:"usersList" }}
 
   <nav class="navbar fixed-top p-auto  navbar-dark bg-primary">
     <div class="container-fluid">
       <div class="d-flex flex-row bd-highlight ">
-        {%if loggedUser.is_authenticated%}
+        {% if loggedUser.is_authenticated %}
         <a class="navbar-brand" href="{% url 'home' loggedUser.id %}">My Blog</a>
         {% else %}
         <a class="navbar-brand" href="{% url 'landing' %}">My Blog</a>
         {% endif %}
         <a class="nav-link active text-light" href="{% url 'mainFeed' %}">Main Feed</a>
-        {%block extraNavs%}
+        {% block extraNavs %}
         <form class="align-bottom align-items-center my-1 justify-content-center" style="vertical-align:top;" id="myform" method="post">
           {% csrf_token %}
           {{userSearchForm.username}}
@@ -65,13 +57,13 @@
         {%endblock%}
       </div>
       <div class="d-flex flex-row-reverse bd-highlight">
-        {%if loggedUser.is_authenticated%}
+        {% if loggedUser.is_authenticated %}
         <a class="nav-link active text-light" href="{% url 'logoutView' %}">Logout</a>
         {% endif %}
 
         {% block navButtons %}
 
-        {%endblock%}
+        {% endblock navButtons %}
 
       </div>
     </div>
@@ -79,7 +71,7 @@
   <!-- add space between fixed navbar and content under -->
   <div class="mt-5 pt-5">
   {% block body %}
-  {% endblock %}
+  {% endblock body %}
   </div>
 </body>
 

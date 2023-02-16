@@ -43,11 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'jquery',
-
+    'rest_framework',
     'practiceApp',
     'blog',
     'bootstrap5',
     'django_extensions',
+    'bootstrap_modal_forms',
+
 
 ]
 AUTHENTICATION_BACKENDS = (

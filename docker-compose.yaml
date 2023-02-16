@@ -27,5 +27,4 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     depends_on:
-      livereload:
-        condition: service_started
+      - livereload

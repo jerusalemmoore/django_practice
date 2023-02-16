@@ -1,3 +1,14 @@
+CURRENT
+working on edit button for user owned posts
+want to make the form a modal 
+think i may need to look into bsmodalform 
+django-bootstrap-modal-forms 2.2.0
+in order to do this without needing to create a separate view
+
+
+
+
+
 make profile image editable on click
 settings views
 make followers/following numbers that lead to view for each
@@ -5,3 +16,5 @@ make followers/following numbers that lead to view for each
   list all follower/following depending on choice
 add image posts
 add profile image to posts
+
+

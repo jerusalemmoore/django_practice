@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm ,AuthenticationForm
 
-
 class PostForm(ModelForm):
     class Meta:
         model = Post
@@ -36,13 +35,6 @@ class LoginForm(AuthenticationForm):
     class Meta:
         model=User
         fields= ['username','password']
-    # def clean(self):
-    #     # cleaned_data = super().clean()
-    #     username = self.cleaned_data.get('username')
-    #     password=self.cleaned_data.get('password')
-    #     return self.cleaned_data
-
-
 class UserSearchForm(forms.Form):
     class Meta:
         fields=['username']

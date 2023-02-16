@@ -5,3 +5,5 @@ django-extensions
 django-livereload-server
 django-jquery
 Pillow
+djangorestframework
+django-bootstrap-modal-forms
