@@ -10,7 +10,10 @@ class PostForm(ModelForm):
     class Meta:
         model = Post
         fields = ['content']
-
+class PostUpdateForm(ModelForm):
+    class Meta:
+        model = Post 
+        fields = ['content']
 
 class RegistrationForm(UserCreationForm):
 

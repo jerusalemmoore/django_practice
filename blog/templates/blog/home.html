@@ -59,6 +59,7 @@
       <!-- only let user add posts to their own home page -->
       {% if loggedUser.id == user.id %}
         <button type="button"
+                id="addPostButton"
                 class=" text-dark btn btn-outline-light"
                 data-bs-toggle="modal"
                 data-bs-target="#exampleModal">
@@ -93,7 +94,7 @@
                 <!-- <input type="submit" value="Submit"> -->
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <input type="submit" class="btn btn-primary">
+                  <input type="submit" class="btn btn-primary" name="addPostSubmit" >
                 </input>
               </div>
             </form>
@@ -119,7 +120,7 @@
               </small>
             </div>
           </div>
-          {% if user == post.user %}
+          {% if loggedUser == post.user %}
             <div class="dropdown">
               <div class="float-end pb-1">
                 <!-- 3 dots -->
@@ -142,7 +143,7 @@
                   <li>
                     {% comment %} <a data-toggle="modal" href="{% url 'test-form' %}" data-target="#form-modal">Click me</a> {% endcomment %}
 
-                    <a href="{% url 'updatePost' loggedUser.id  post.id %}"  class="dropdown-item"  >Edit</a>
+                    <a id="updateModalAnchor" href="{% url 'updatePost' loggedUser.id  post.id %}"  class="dropdown-item" data-home="{% url 'home' user.id%}" >Edit</a>
                   </li>
                 </ul>
               </div>
@@ -187,7 +188,7 @@
                 <!-- <input type="submit" value="Submit"> -->
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <input type="submit" class="btn btn-primary">
+                  <input name="postUpdateSubmit" type="submit" class="btn btn-primary">
                 </input>
               </div>
             </form>

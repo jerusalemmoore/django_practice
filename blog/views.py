@@ -96,7 +96,10 @@ def home(request, id, postid=None):
     following = user.following.all()
     followers = user.followed_by.all()
     allposts = retrieveAllPosts(user)
-    
+    postForm = PostForm()
+    postUpdateForm = PostForm()
+    userSearchForm = UserSearchForm()
+    # if we redirected to home with a postid, assume its to update a specific post in a modal and provide an instance
     if postid and request.method=='GET':
         postInstance = get_object_or_404(Post, id=postid)
         print(postInstance)
@@ -104,30 +107,34 @@ def home(request, id, postid=None):
         print(postUpdateForm)
     else:
         postUpdateForm = PostForm()
+
     if request.method == 'POST':
-        postForm = PostForm(request.POST)
-        userSearchForm = UserSearchForm(request.POST)
-
-        if postForm.is_valid():
-            post = postForm.save(commit=False)
-            post.user = user
-            post.save()
-            return HttpResponseRedirect(reverse('home', kwargs={'id': user.id}))
-        elif postUpdateForm.is_valid():
-            postUpdateForm.save()
-            return HttpResponseRedirect(reverse('home', kwargs={'id': user.id}))
-
-        elif userSearchForm.is_valid():
-            print(User.objects.all())
-            print("form")
-            value = userSearchForm.data['username']
-            # print(User.objects.get(username=userForm['username']).id)
-            return HttpResponseRedirect(reverse('home', kwargs={'id': User.objects.get(username=value).pk}))
+        # to verify what form i'm submitting read the names what was pressed
+        if 'addPostSubmit' in request.POST:
+            postForm = PostForm(request.POST)
+            if postForm.is_valid():
+                post = postForm.save(commit=False)
+                post.user = user
+                post.save()
+                return HttpResponseRedirect(reverse('home', kwargs={'id': user.id}))
+        elif 'postUpdateSubmit' in request.POST:
+            postInstance = get_object_or_404(Post, id=postid)
+            postUpdateForm = PostUpdateForm(request.POST, instance=postInstance)
+            if postUpdateForm.is_valid():
+                postUpdateForm.save()
+                return HttpResponseRedirect(reverse('home', kwargs={'id': user.id}))
+        # last case assumes we submitted the user search form, can use convention above because of difference in how 
+        # the user search form doesn't have a submit button
+        else:
+            userSearchForm = UserSearchForm(request.POST)
+            if userSearchForm.is_valid():
+                
+                value = userSearchForm.data['username']
+                return HttpResponseRedirect(reverse('home', kwargs={'id': get_object_or_404(User,username=value).pk}))
     else:
-        print("hiiiasf;kljsf;")
-        print(postid)
         postForm = PostForm()
         userSearchForm = UserSearchForm()
+        # this caused the update form to be blank when opening modal
         # postUpdateForm = PostForm()
 
     context = {'loggedUser': loggedUser,
@@ -156,13 +163,7 @@ def follow(request, id):
     follower = Follower(user=loggedUser, following=user)
     follower.save()
     return HttpResponseRedirect(reverse('home', kwargs={'id': user.id}))
-# def removePost(request,id):
-#     post = get_object_or_404(Post,id=id)
-#
-# class PostUpdateView(BSModalUpdateView):
-#     template_name = 'templates/form_template.html'
-#     form_class = PostForm
-#     success_message = 'Success: Post was updated.'
-#     success_url = reverse_lazy('updatePost')
+
+# pass the postid from /home/userid/updatePost/postid to /home/userid
 def updatePost(request,id,postid):
     return HttpResponseRedirect(reverse('home', kwargs={'id': id, 'postid': postid}))

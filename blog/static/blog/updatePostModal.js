@@ -34,10 +34,20 @@ function getCookie(){
 // }
 
 $(document).ready(function () {
-    console.log("hodsfj;alkfdj;asldkj")
+    // console.log("hodsfj;alkfdj;asldkj")
+    // this in a url suggests an attempt to update a post
+    // this url is pushing the instance info to the modal through django
+    const modalAnchor = document.querySelector('#updateModalAnchor')
     if(window.location.href.indexOf("updatePost") > 1){
         $("#updatePostModal").modal('show')
     }
+    $("#updatePostModal").on('hidden.bs.modal', function(e){
+        console.log("hello")
+        location.href = modalAnchor.dataset.home
+        
+    })
+
+    const addPostButton = document.querySelector('#addPostButton')
 })
     // $('#updatePostModalButton').click(function () {
     //     var postid = $(this).attr("data-postid");
