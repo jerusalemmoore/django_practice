@@ -8,8 +8,10 @@ playing around with django while learning more about web programming fundamental
     3. access through: http://localhost:8000/blog/
    
   
-    note: still need to take care of possible race condition in service start:).
+    note: still need to take care of possible race conditions in service start:).
     web service in docker-compose.yml may start before livereload does but this 
-    shouldn't be  an issue if you're just looking around 
+    shouldn't be  an issue if you're just looking around. the web service may start  
+    before the db is up and running on first time run   
+    but usually comes up fine on the second run of the build.
     note: for linux, you may need to prepend the above commands with "sudo" 
     
